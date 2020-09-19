@@ -1,0 +1,134 @@
+{%- comment -%}tvshooks{%- endcomment -%}
+
+{%- assign css_body_classes = '' -%}
+
+
+{%- comment -%}template{%- endcomment -%}
+
+{%- comment -%}
+{%- assign this_template = template | replace: '.', ' ' | truncatewords: 1, '' -%}
+
+{%- assign css_body_classes = css_body_classes | append: this_template | append: ' ' -%}
+{%- endcomment -%}
+
+{%- comment -%}template{%- endcomment -%}
+
+{%- assign request_type = request.type | handle -%}
+
+{%- assign css_body_classes = css_body_classes | append: request_type | handle | append: ' ' -%}
+
+{%- if template.suffix != nil -%}
+  {%- assign template_suffix = template.suffix | handle -%}
+  {%- assign css_body_classes = css_body_classes | append: 'template--suffix-' | append: template_suffix | append: ' ' -%}
+{%- endif -%}
+
+{%- if template.directory != nil -%}
+  {%- assign template_directory = template.directory | handle -%}
+  {%- assign css_body_classes = css_body_classes | append: 'template--directory-' | append: template_directory | append: ' ' -%}
+{%- endif -%}
+
+
+{%- comment -%}product{%- endcomment -%}
+
+{%- if template.name == 'product' -%}
+  {%- assign css_body_classes = css_body_classes | append: 'product ' -%}
+  {%- assign css_body_classes = css_body_classes | append: 'product--' | append: product.name -%}
+{%- endif -%}
+
+{%- if product.vendor -%}
+  {%- assign product_vendor = product.vendor | handle -%}
+  {%- assign css_body_classes = css_body_classes | append: 'product--vendor-' | append: product_vendor | append: ' ' -%}
+{%- endif -%}
+
+{%- if product.type -%}
+  {%- assign product_type = product.type | handle -%}
+  {%- assign css_body_classes = css_body_classes | append: 'product--type-' | append: product_type | append: ' ' -%}
+{%- endif -%}
+
+{%- if product.template_suffix -%}
+  {%- assign product_template_suffix = product.template_suffix | handle -%}
+  {%- assign css_body_classes = css_body_classes | append: 'product--suffix-' | append: product_template_suffix | append: ' ' -%}
+{%- endif -%}
+
+
+{%- comment -%}collections{%- endcomment -%}
+
+{%- if template.name == 'collection' -%}
+  {%- assign css_body_classes = css_body_classes | append: 'collection ' -%}
+  {%- assign css_body_classes = css_body_classes | append: 'collection--' | append: collection.handle -%}
+{%- endif -%}
+
+{%- if collection.name -%}
+  {%- assign collection_name = collection.template_suffix | handle -%}
+  {%- assign css_body_classes = css_body_classes | append: 'collection--suffix-' | append: collection.template_suffix | append: ' ' -%}
+{%- endif -%}
+
+{%- if collection.template_suffix -%}
+  {%- assign collection_template_suffix = collection.template_suffix | handle -%}
+  {%- assign css_body_classes = css_body_classes | append: 'collection--suffix-' | append: collection.template_suffix | append: ' ' -%}
+{%- endif -%}
+
+
+{%- comment -%}blog{%- endcomment -%}
+
+{%- if template.name == 'blog' -%}
+  {%- assign css_body_classes = css_body_classes | append: 'blog' | append: ' ' -%}
+  {%- assign css_body_classes = css_body_classes | append: 'blog--' | append: blog.handle | append: ' ' -%}
+  {%- if blog.comments_enabled? -%}
+  {%- assign css_body_classes = css_body_classes | append: 'blog--comments-enabled' | append: ' ' -%}
+  {%- else -%}
+  {%- assign css_body_classes = css_body_classes | append: 'blog--comments-disabled' | append: ' ' -%}
+  {%- endif -%}
+  {%- if blog.moderated? -%}
+  {%- assign css_body_classes = css_body_classes | append: 'blog--moderated' | append: ' ' -%}
+  {%- else -%}
+  {%- assign css_body_classes = css_body_classes | append: 'blog--not-moderated' | append: ' ' -%}
+  {%- endif -%}
+  {%- assign css_body_classes = css_body_classes | append: 'blog--article-visible-articles-count-' | append: blog.articles_count | append: ' ' -%}
+  {%- assign blog_total_articles = blog.articles | size -%}
+  {%- if blog_total_articles > 0 -%}
+  {%- assign css_body_classes = css_body_classes | append: 'blog--article-total-articles-count-' | append: blog_total_articles | append: ' ' -%}
+  {%- endif -%}
+{%- endif -%}
+
+
+{%- comment -%}article{%- endcomment -%}
+
+{%- if template.name == 'article' -%}
+  {%- assign css_body_classes = css_body_classes | append: 'article ' -%}
+  
+  {%- assign article_blog = article.handle | split: '/' | first -%}
+
+  {%- assign css_body_classes = css_body_classes | append: 'blog--' | append: article_blog | append: ' ' -%}
+  
+  {%- assign article_name = article.handle | split: '/' | last -%}
+  
+  {%- assign css_body_classes = css_body_classes | append: 'article--' | append: article_name | append: ' ' -%}
+
+  {%- if article.comments_enabled? -%}
+  {%- assign css_body_classes = css_body_classes | append: 'article--comments-enabled' | append: ' ' -%}
+  {%- else -%}
+  {%- assign css_body_classes = css_body_classes | append: 'article--comments-disabled' | append: ' ' -%}
+  {%- endif -%}
+{%- endif -%}
+
+
+{%- comment -%}customers{%- endcomment -%}
+
+{%- if shop.customer_accounts_enabled -%}
+  {%- assign css_body_classes = css_body_classes | append: 'customer--accounts-enabled ' -%}
+
+  {%- if customer -%}
+    {%- assign css_body_classes = css_body_classes | append: 'customer--logged-in ' -%}
+  {%- else -%}
+    {%- assign css_body_classes = css_body_classes | append: 'customer--logged-out ' -%}
+  {%- endif -%}
+
+{%- else -%}
+  {%- assign css_body_classes = css_body_classes | append: 'customer--accounts-disabled ' -%}
+{%- endif -%}
+
+
+{%- comment -%}return{%- endcomment -%}
+{{- css_body_classes -}}
+
